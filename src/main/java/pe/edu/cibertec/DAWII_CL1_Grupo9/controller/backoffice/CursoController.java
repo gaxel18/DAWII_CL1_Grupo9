@@ -20,7 +20,7 @@ public class CursoController {
 
     @GetMapping("")
     public String index(Model model){
-        model.addAttribute("listarCursos",
+        model.addAttribute("listaCursos",
                 cursoService.listarCursos());
         return "backoffice/curso/frmMantCurso";
     }

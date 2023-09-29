@@ -17,7 +17,7 @@ $(document).on("click", ".btnactualizar", function(){
 $(document).on("click", "#btnguardar", function(){
     $.ajax({
         type: "POST",
-        url: "/curso/registrar",
+        url: "/curso/guardar",
         contentType: "application/json",
         data: JSON.stringify({
             idcurso: $("#hddidcurso").val(),
