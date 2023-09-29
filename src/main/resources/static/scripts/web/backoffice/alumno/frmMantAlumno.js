@@ -1,47 +1,36 @@
 $(document).on("click", "#btnagregar", function(){
-    $("#txtnomproducto").val("");
-    $("#txtpreciounit").val("");
-    $("#hddcodprod").val("0");
-    $("#cbocategoria").empty();
-    $("#cboproveedor").empty();
-    $("#switchproducto" ).hide();
-    $("#chkdescontinuado").prop("checked", false);
-    listarCboCategoriasProveedores(0,0);
+    $("#txtapellidoalumno").val("");
+    $("#txtnombrealumno").val("");
+    $("#hddidalumno").val("0");
+    $("#cboespecialidad").empty();
+    $("#txtprocealumno").val("");
+    listarCboEspecialidades(0);
     $("#modalNuevo").modal("show");
 });
 
 $(document).on("click", ".btnactualizar", function(){
-    $("#txtnomproducto").val($(this).attr("data-prodname"));
-    $("#txtpreciounit").val($(this).attr("data-produnit"));
-    $("#hddcodprod").val($(this).attr("data-prodcod"));
-    $("#cbocategoria").empty();
-    $("#cboproveedor").empty();
-    listarCboCategoriasProveedores($(this).attr("data-prodcateg"), $(this).attr("data-prodprov"));
-    $("#switchproducto" ).show();
-    console.log($(this).attr("data-descontinuado"));
-    if($(this).attr("data-descontinuado") === "true"){
-        $("#chkdescontinuado").prop("checked", true);
-    }else
-        $("#chkdescontinuado").prop("checked", false);
-    $("#modalNuevo").modal("show");
+    $("#txtapellidoalumno").val($(this).attr("data-apealu"));
+    $("#txtnombrealumno").val($(this).attr("data-nomalu"));
+    $("#cboespecialidad").empty();
+    $("#txtprocealumno").val($(this).attr("data-proalu"));
+    listarCboEspecialidades($(this).attr("data-aluespecialidad"));
 });
 
 $(document).on("click", "#btnguardar", function(){
     $.ajax({
         type: "POST",
-        url: "/product/registrar",
+        url: "/alumno/guardar",
         contentType: "application/json",
         data: JSON.stringify({
-            productid: $("#hddidprod").val(),
-            productname: $("#txtnomproducto").val(),
-            unitprice: $("#txtpreciounit").val(),
-            categoryid: $("#cbocategoria").val(),
-            supplierid: $("#cboproveedor").val(),
-            discontinued: $('#chkdescontinuado').prop('checked')
+            idalumno: $("#hddidalumno").val(),
+            apellidoalumno: $("#txtapellidoalumno").val(),
+            nombrealumno: $("#txtnombrealumno").val(),
+            idesp: $("#cboespecialidad").val(),
+            procealumno: $("#txtprocealumno").val(),
         }),
         success: function(resultado){
             if(resultado.respuesta){
-                listarProductos();
+                listarAlumnos;
             }
             alert(resultado.mensaje);
         }
@@ -49,32 +38,32 @@ $(document).on("click", "#btnguardar", function(){
     $("#modalNuevo").modal("hide");
 });
 
-function listarCboCategoriasProveedores(idcategoria, idproveedor){
+function listarCboEspecialidadesAlumnos(idesp,idalumno){
     $.ajax({
         type: "GET",
-        url: "/category/listar",
+        url: "/alumno/listar",
         dataType: "json",
         success: function(resultado){
             $.each(resultado, function(index, value){
-                $("#cbocategoria").append(
-                    `<option value="${value.categoryid}">${value.categoryname}</option>`
+                $("#cboespecialidad").append(
+                    `<option value="${value.idesp}">${value.nomesp}</option>`
                 )
             });
             if(idcategoria > 0){
-                $("#cbocategoria").val(idcategoria);
+                $("#cboespecialidad").val(idespecialidad);
             }
             $.ajax({
                     type: "GET",
-                    url: "/supplier/listar",
+                    url: "/especialidad/listar",
                     dataType: "json",
                     success: function(resultado){
                         $.each(resultado, function(index, value){
-                            $("#cboproveedor").append(
-                                `<option value="${value.supplierid}">${value.companyname}</option>`
+                            $("#cboalumno").append(
+                                `<option value="${value.idalumno}">${value.nomalu}</option>`
                             )
                         });
-                        if(idproveedor > 0){
-                            $("#cboproveedor").val(idproveedor);
+                        if(idalumno > 0){
+                            $("#cboalumno").val(idalumno);
                         }
                     }
                 })
@@ -82,28 +71,27 @@ function listarCboCategoriasProveedores(idcategoria, idproveedor){
     });
 }
 
-function listarProductos(){
+function listarAlumnos(){
     $.ajax({
         type: "GET",
-        url: "/product/listar",
+        url: "/alumnos/listar",
         dataType: "json",
         success: function(resultado){
-            $("#tblproducto > tbody").html("");
+            $("#tblalumno > tbody").html("");
             $.each(resultado, function(index, value){
-                $("#tblproducto > tbody").append("<tr>"+
-                    "<td>"+value.productid+"</td>"+
-                    "<td>"+value.productname+"</td>"+
-                    "<td>"+value.unitprice+"</td>"+
-                    "<td>"+value.categories.categoryname+"</td>"+
-                    "<td>"+value.suppliers.companyname+"</td>"+
+                $("#tblalumno > tbody").append("<tr>"+
+                    "<td>"+value.idalumno+"</td>"+
+                    "<td>"+value.apellidoalumno+"</td>"+
+                    "<td>"+value.nombrealumno+"</td>"+
+                    "<td>"+value.especialidad.nomesp+"</td>"+
+                    "<td>"+value.procealumno+"</td>"+
                     "<td>"+
                         "<button type='button' class='btn btn-info btnactualizar'"+
-                                     "data-idsala='"+value.productid+"'"+
-                                     "data-descsala='"+value.productname+"'"+
-                                     "data-asientos='"+value.unitprice+"'"+
-                                     "data-idestado='"+value.categories.categoryid+"'"+
-                                     "data-idestado='"+value.suppliers.supplierid+"'"+
-                                     "data-descontinuado='"+value.discontinued+"'"+
+                                     "data-idsala='"+value.idalumno+"'"+
+                                     "data-descsala='"+value.apellidoalumno+"'"+
+                                     "data-descsala='"+value.nombrealumno+"'"+
+                                     "data-idestado='"+value.especialidad.idesp+"'"+
+                                     "data-descsala='"+value.procealumno+"'"+
                                      "><i class='fas fa-edit'></i></button>"+
                     "</td></tr>");
             })
