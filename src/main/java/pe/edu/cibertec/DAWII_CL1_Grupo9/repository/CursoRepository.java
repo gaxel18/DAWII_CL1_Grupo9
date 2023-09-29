@@ -7,4 +7,5 @@ import pe.edu.cibertec.DAWII_CL1_Grupo9.model.bd.Curso;
 @Repository
 public interface CursoRepository extends JpaRepository<Curso,Integer> {
 
+
 }
