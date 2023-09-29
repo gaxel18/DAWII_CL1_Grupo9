@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{layout::head}">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script th:src="@{/scripts/web/backoffice/notas/frmMantNotas.js}"
+        type="text/javascript"></script>
+<nav th:replace="~{layout::menu}"></nav>
+<div class="card ">
+    <div class="card-header text-bg-dark mb-3">
+        Notas
+    </div>
+    <div class="card-body">
+        <button id="btnagregar"
+                type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar</button>
+        <hr />
+        <div id="mensaje"></div>
+        <table id="tblnotas" class="table">
+            <thead>
+            <tr>
+                <th scope="col">Código</th>
+                <th scope="col">Calificacion</th>
+                <th scope="col">Fecha de Examen</th>
+                <th scope="col">Alumno</th>
+                <th scope="col">Curso</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="nota :${listaNotas}">
+                <td th:text="${nota.idnota}"></td>
+                <td th:text="${nota.calificacion}"></td>
+                <td th:text="${nota.fecha_examen}"></td>
+                <td th:text="${nota.alumno.idalumno}"></td>
+                <td th:text="${nota.curso.idcurso}"></td>
+                <td>
+                    <button type="button" class="btn btn-info btnactualizar"
+                            th:data-prodcod="${nota.idnota}"
+                            th:data-prodname="${nota.calificacion}"
+                            th:data-produnit="${nota.fecha_examen}"
+                            th:data-prodcateg="${nota.alumno.idalumno}"
+                            th:data-prodprov="${nota.curso.idcurso}"><i class="fas fa-edit"></i></button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Modal Registrar / Actualizar Notas -->
+<div class="modal fade" id="modalNuevo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Notas</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="txtcalificacion" class="form-label">Calificacion</label>
+                    <input type="number" class="form-control" id="txtcalificacion">
+                </div>
+                <div class="mb-3">
+                    <label for="txtfecha_examen" class="form-label">Fecha del Examen</label>
+                    <input type="date" class="form-control" id="txtfecha_examen">
+                </div>
+                <div class="mb-3">
+                    <label for="cboalumno" class="form-label">Alumno</label>
+                    <select id="cboalumno" class="form-control"></select>
+                </div>
+                <div class="mb-3">
+                    <label for="cbocurso" class="form-label">Curso</label>
+                    <select id="cbocurso" class="form-control"></select>
+                </div>
+
+                <input type="hidden" id="hddcodnota" value="0">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times"></i> Cancelar</button>
+                <button type="button" id="btnguardar" class="btn btn-primary"><i class="fas fa-save"></i> Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
