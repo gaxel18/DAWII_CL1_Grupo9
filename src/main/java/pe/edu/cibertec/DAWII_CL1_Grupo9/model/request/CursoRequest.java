@@ -6,6 +6,6 @@ import lombok.Data;
 public class CursoRequest {
     private Integer idcurso;
     private String nombrecurso;
-    private Integer idesp;
+    private String idesp;
     private Integer idprofesor;
 }
